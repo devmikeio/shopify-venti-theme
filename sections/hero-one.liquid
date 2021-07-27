@@ -1,0 +1,153 @@
+{{ 'section-hero-one.css' | asset_url | stylesheet_tag }}
+
+<div className="hero hero1 hero1--aligned-{{ section.settings.info_alignment }}">
+    
+    {%- if section.settings.image != blank -%}
+        <img srcset="{%- if section.settings.image.width >= 165 -%}{{ section.settings.image | img_url: '165x' }} 165w,{%- endif -%}
+        {%- if section.settings.image.width >= 360 -%}{{ section.settings.image | img_url: '360x' }} 360w,{%- endif -%}
+        {%- if section.settings.image.width >= 535 -%}{{ section.settings.image | img_url: '535x' }} 535w,{%- endif -%}
+        {%- if section.settings.image.width >= 720 -%}{{ section.settings.image | img_url: '720x' }} 720w,{%- endif -%}
+        {%- if section.settings.image.width >= 940 -%}{{ section.settings.image | img_url: '940x' }} 940w,{%- endif -%}
+        {%- if section.settings.image.width >= 1070 -%}{{ section.settings.image | img_url: '2000x' }} 2000w{%- endif -%}"
+        src="{{ section.settings.image | img_url: '533x' }}"
+        sizes="(min-width: 1100px) 2000px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+        alt="{{ section.settings.image.alt | escape }}"
+        loading="lazy"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+        className="hero1__bg"
+        >
+    {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+    {% assign opacity = section.settings.opacity | divided_by: 100.00 %}
+    <div className="hero1__content-container" style="background-color: {{ section.settings.backgroundcolor | color_modify: 'alpha', opacity }}">
+        <div className="hero1__info">
+            {%- for block in section.blocks -%}
+                {% case block.type %}
+                    {%- when 'heading' -%}
+                        <h1 className="hero1__title">{{ block.settings.title | escape }}</h1>
+                    {%- when 'description' -%}
+                        <p className="hero1__description">{{ block.settings.description | escape }}</p>
+                    {%- when 'button' -%}
+                        {%- if block.settings.button_label != blank -%}
+                            <a href="{{ block.settings.button_link }}" class="hero1__button" {{ block.shopify_attributes }}>{{ block.settings.button_label | escape }}</a>
+                        {%- endif -%}
+                {%- endcase -%}
+            {%- endfor -%}
+            
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero One",
+  "class": "spaced-section spaced-section--full-width",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image-with-text.settings.image.label"
+    },
+    {
+      "type": "color",
+      "id": "backgroundcolor",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "Color Overlay Opacity",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "info_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left Side"
+        },
+        {
+          "value": "center",
+          "label": "Centered"
+        },
+        {
+          "value": "right",
+          "label": "Right Side"
+        }
+      ],
+      "default": "right",
+      "label": "Info Alignment"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading Title [H1]",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "H1 Title",
+          "default": "H1 Title"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description/Slogan",
+          "default": "Example Message It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "t:sections.image-with-text.blocks.button.name",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+          "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero One",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
