@@ -53,6 +53,12 @@
           "type": "share",
           "settings": {
           }
+        },
+        "d64ec79a-9bb2-4c0a-a33e-245f7b039edf": {
+          "type": "image",
+          "settings": {
+            "image": "{{ product.metafields.my_fields.additional_image.value }}"
+          }
         }
       },
       "block_order": [
@@ -64,7 +70,8 @@
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share"
+        "share",
+        "d64ec79a-9bb2-4c0a-a33e-245f7b039edf"
       ],
       "settings": {
         "enable_sticky_info": true,
